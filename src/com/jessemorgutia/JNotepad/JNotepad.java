@@ -12,11 +12,18 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.Theme;
+import org.fife.ui.rtextarea.RTextScrollPane;
+
 public class JNotepad implements ActionListener, Printable {
 
 	JFrame frame;
-	JTextArea pad;
-	JScrollPane notepad;
+	String syntax_style;
+	RSyntaxTextArea pad;
+	RTextScrollPane notepad;
+	Theme theme;
 	JMenuBar menuBar;
 	JLabel caretCount;
 	String originalPad;
@@ -31,6 +38,7 @@ public class JNotepad implements ActionListener, Printable {
 
 	// GLOBAL MENU ITEMS
 	JCheckBoxMenuItem menu_statusbar;
+	JCheckBoxMenuItem menu_showlinenumbers;
 	JMenuItem menu_goto;
 	JMenuItem menu_copy;
 	JMenuItem menu_cut;
@@ -53,7 +61,10 @@ public class JNotepad implements ActionListener, Printable {
 				| IllegalAccessException | UnsupportedLookAndFeelException e) {
 		}
 
-		pad = new JTextArea();
+		pad = new RSyntaxTextArea();
+		theme = new Theme(pad);
+		syntax_style = SyntaxConstants.SYNTAX_STYLE_NONE;
+		System.out.println(pad.getDefaultSyntaxScheme());
 		finderString = "";
 		pageFormat = new PageFormat();
 		printer = PrinterJob.getPrinterJob();
@@ -125,9 +136,7 @@ public class JNotepad implements ActionListener, Printable {
 		});
 		frame.setSize(900, 600);
 		frame.setLocationRelativeTo(null);
-		notepad = new JScrollPane(pad,
-				ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		notepad = new RTextScrollPane(pad);
 
 		initializeMenu();
 		// Load icon image
@@ -282,12 +291,31 @@ public class JNotepad implements ActionListener, Printable {
 				statusBarEnabled = true;
 			}
 			break;
+		case "Line Numbers":
+			if (notepad.getLineNumbersEnabled()) {
+				notepad.setLineNumbersEnabled(false);
+			} else
+				notepad.setLineNumbersEnabled(true);
+
 		case "View Help":
 			break;
 		case "About Notepad":
 			displayAbout();
 			break;
+		case "Java":
+			syntax_style = SyntaxConstants.SYNTAX_STYLE_JAVA;
+			pad.setSyntaxEditingStyle(syntax_style);
 
+			break;
+		case "None":
+			syntax_style = SyntaxConstants.SYNTAX_STYLE_NONE;
+			pad.setSyntaxEditingStyle(syntax_style);
+			break;
+		case "C":
+			syntax_style = SyntaxConstants.SYNTAX_STYLE_C;
+			pad.setSyntaxEditingStyle(syntax_style);
+
+			break;
 		}
 
 	}
@@ -672,6 +700,7 @@ public class JNotepad implements ActionListener, Printable {
 		JMenu menu_format = new JMenu("Format");
 		JMenu menu_view = new JMenu("View");
 		JMenu menu_help = new JMenu("Help");
+		JMenu menu_syntax = new JMenu("Syntax");
 
 		JMenuItem menu_new = new JMenuItem("New", KeyEvent.VK_N);
 		JMenuItem menu_open = new JMenuItem("Open...", KeyEvent.VK_O);
@@ -695,6 +724,16 @@ public class JNotepad implements ActionListener, Printable {
 		JMenuItem menu_viewhelp = new JMenuItem("View Help", KeyEvent.VK_H);
 		JMenuItem menu_about = new JMenuItem("About Notepad", KeyEvent.VK_A);
 		JCheckBoxMenuItem menu_wordwrap = new JCheckBoxMenuItem("Word Wrap");
+		JRadioButtonMenuItem syntax_java = new JRadioButtonMenuItem("Java");
+		JRadioButtonMenuItem syntax_none = new JRadioButtonMenuItem("None");
+		JRadioButtonMenuItem syntax_c = new JRadioButtonMenuItem("C");
+
+		ButtonGroup syntax_group = new ButtonGroup();
+		syntax_group.add(syntax_c);
+		syntax_group.add(syntax_none);
+		syntax_group.add(syntax_java);
+
+		menu_showlinenumbers = new JCheckBoxMenuItem("Line Numbers");
 		menu_goto = new JMenuItem("Go To...", KeyEvent.VK_G);
 		menu_statusbar = new JCheckBoxMenuItem("Status Bar");
 
@@ -761,6 +800,9 @@ public class JNotepad implements ActionListener, Printable {
 		menu_goto.addActionListener(this);
 		menu_selectall.addActionListener(this);
 		menu_timedate.addActionListener(this);
+		syntax_java.addActionListener(this);
+		syntax_none.addActionListener(this);
+		syntax_c.addActionListener(this);
 		menu_wordwrap.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
@@ -786,6 +828,8 @@ public class JNotepad implements ActionListener, Printable {
 		});
 		menu_font.addActionListener(this);
 		menu_statusbar.addActionListener(this);
+		menu_showlinenumbers.addActionListener(this);
+		menu_showlinenumbers.setSelected(true);
 		menu_viewhelp.addActionListener(this);
 		menu_about.addActionListener(this);
 
@@ -817,15 +861,20 @@ public class JNotepad implements ActionListener, Printable {
 		menu_format.add(menu_wordwrap);
 		menu_format.add(menu_font);
 		menu_view.add(menu_statusbar);
+		menu_view.add(menu_showlinenumbers);
 		menu_help.add(menu_viewhelp);
 		menu_help.addSeparator();
 		menu_help.add(menu_about);
+		menu_syntax.add(syntax_none);
+		menu_syntax.add(syntax_java);
+		menu_syntax.add(syntax_c);
 
 		menuBar.add(menu_file);
 		menuBar.add(menu_edit);
 		menuBar.add(menu_format);
 		menuBar.add(menu_view);
 		menuBar.add(menu_help);
+		menuBar.add(menu_syntax);
 
 		popup.add(menu_cut);
 		popup.add(menu_copy);

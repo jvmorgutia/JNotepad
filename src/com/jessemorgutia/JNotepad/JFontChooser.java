@@ -123,7 +123,7 @@ public class JFontChooser extends JFrame implements ListSelectionListener,
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getActionCommand() == "Ok") {
-			pad.setFont(new Font(name, style, size + 5));
+			pad.setFont(new Font(name, style, size));
 			frame.dispose();
 		}
 		changedValue();
@@ -150,6 +150,6 @@ public class JFontChooser extends JFrame implements ListSelectionListener,
 
 		}
 		size = ((Integer) fontSizes.getSelectedItem()).intValue();
-		sample.setFont(new Font(name, style, size + 5));
+		sample.setFont(new Font(name, style, size));
 	}
 }
