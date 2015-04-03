@@ -14,7 +14,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 public class JNotepad implements ActionListener, Printable {
@@ -23,14 +22,13 @@ public class JNotepad implements ActionListener, Printable {
 	String syntax_style;
 	RSyntaxTextArea pad;
 	RTextScrollPane notepad;
-	Theme theme;
 	JMenuBar menuBar;
 	JLabel caretCount;
 	String originalPad;
 	JFontChooser fontChooser;
 	JDialog finder;
 	String finderString;
-	// FOR older java support
+
 	JTextField field;
 	JRadioButton dn_b;
 	JCheckBox m_case;
@@ -62,9 +60,8 @@ public class JNotepad implements ActionListener, Printable {
 		}
 
 		pad = new RSyntaxTextArea();
-		theme = new Theme(pad);
+		pad.setCurrentLineHighlightColor(new Color(235, 235, 255));
 		syntax_style = SyntaxConstants.SYNTAX_STYLE_NONE;
-		System.out.println(pad.getDefaultSyntaxScheme());
 		finderString = "";
 		pageFormat = new PageFormat();
 		printer = PrinterJob.getPrinterJob();
@@ -726,6 +723,7 @@ public class JNotepad implements ActionListener, Printable {
 		JCheckBoxMenuItem menu_wordwrap = new JCheckBoxMenuItem("Word Wrap");
 		JRadioButtonMenuItem syntax_java = new JRadioButtonMenuItem("Java");
 		JRadioButtonMenuItem syntax_none = new JRadioButtonMenuItem("None");
+		syntax_none.setSelected(true);
 		JRadioButtonMenuItem syntax_c = new JRadioButtonMenuItem("C");
 
 		ButtonGroup syntax_group = new ButtonGroup();
@@ -866,6 +864,7 @@ public class JNotepad implements ActionListener, Printable {
 		menu_help.addSeparator();
 		menu_help.add(menu_about);
 		menu_syntax.add(syntax_none);
+		menu_syntax.addSeparator();
 		menu_syntax.add(syntax_java);
 		menu_syntax.add(syntax_c);
 
