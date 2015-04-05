@@ -63,6 +63,7 @@ public class JFontChooser extends JFrame implements ListSelectionListener,
 		fontSizes.addActionListener(this);
 
 		JButton cancel = new JButton("Cancel");
+		cancel.addActionListener(this);
 
 		JScrollPane fonts = new JScrollPane(fontList);
 		fonts.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -125,8 +126,12 @@ public class JFontChooser extends JFrame implements ListSelectionListener,
 		if (ae.getActionCommand() == "Ok") {
 			pad.setFont(new Font(name, style, size));
 			frame.dispose();
+			changedValue();
 		}
-		changedValue();
+		else {
+			frame.dispose();
+		}
+		
 	}
 
 	public void changedValue() {
