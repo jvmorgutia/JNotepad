@@ -44,8 +44,10 @@ public class JNotepad implements ActionListener, Printable {
 	JMenuItem menu_paste;
 	JPopupMenu popup;
 
-	ImageIcon img;
-	File image = new File("JNotepad.png");
+	// ImageIcon img16;
+	// File image = new File("JNotepad.png");
+	Image img32;
+	Image img48;
 	String filename;
 	File file;
 	boolean statusBarEnabled;
@@ -58,6 +60,14 @@ public class JNotepad implements ActionListener, Printable {
 		} catch (ClassNotFoundException | InstantiationException
 				| IllegalAccessException | UnsupportedLookAndFeelException e) {
 		}
+
+		Toolkit tools = Toolkit.getDefaultToolkit();
+		java.net.URL url32 = ClassLoader
+				.getSystemResource("com/jessemorgutia/images/JNotepad32.png");
+		java.net.URL url48 = ClassLoader
+				.getSystemResource("com/jessemorgutia/images/JNotepad48.png");
+		img32 = tools.createImage(url32);
+		img48 = tools.createImage(url48);
 
 		pad = new RSyntaxTextArea();
 		pad.setCurrentLineHighlightColor(new Color(235, 235, 255));
@@ -100,6 +110,7 @@ public class JNotepad implements ActionListener, Printable {
 
 		// Initialize the frame
 		frame = new JFrame(filename + " - Notepad");
+		frame.setIconImage(img32);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.addWindowListener(new WindowListener() {
 			public void windowClosing(WindowEvent we) {
@@ -137,15 +148,13 @@ public class JNotepad implements ActionListener, Printable {
 
 		initializeMenu();
 		// Load icon image
-		if (image.exists()) {
-			img = new ImageIcon("JNotepad.png");
-			frame.setIconImage(img.getImage());
-			fontChooser.frame.setIconImage(img.getImage());
-			System.out.println("Icon Image loaded successfully");
-		} else {
-			System.out.println("Icon Image not found");
-		}
-
+		/*
+		 * if (image.exists()) { img16 = new ImageIcon("JNotepad.png");
+		 * frame.setIconImage(img16.getImage());
+		 * fontChooser.frame.setIconImage(img16.getImage());
+		 * System.out.println("Icon Image loaded successfully"); } else {
+		 * System.out.println("Icon Image not found"); }
+		 */
 		frame.setLayout(new BorderLayout());
 		frame.add(notepad, BorderLayout.CENTER);
 		frame.add(statusBar, BorderLayout.SOUTH);
@@ -219,6 +228,7 @@ public class JNotepad implements ActionListener, Printable {
 			confirmClose(true);
 			break;
 		case "Undo":
+			pad.undoLastAction();
 			break;
 		case "Cut":
 			pad.cut();
@@ -664,8 +674,9 @@ public class JNotepad implements ActionListener, Printable {
 		modal.setLayout(new FlowLayout());
 		modal.setSize(400, 100);
 		modal.setLocationRelativeTo(frame);
+		modal.add(new JLabel(new ImageIcon(img48)));
 		modal.add(new JLabel(
-				" (C) JNotepad release version 0.9 - Jesse Morgutia "));
+				" (C) JNotepad release version 1.0.6 - Jesse Morgutia "));
 		modal.setVisible(true);
 	}
 
@@ -747,7 +758,6 @@ public class JNotepad implements ActionListener, Printable {
 		menu_delete.setEnabled(false);
 
 		// TODO All menu items that are not yet completed will be disabled.
-		menu_undo.setEnabled(false);
 		menu_replace.setEnabled(false);
 		menu_viewhelp.setEnabled(false);
 
