@@ -312,16 +312,31 @@ public class JNotepad implements ActionListener, Printable {
 		case "Java":
 			syntax_style = SyntaxConstants.SYNTAX_STYLE_JAVA;
 			pad.setSyntaxEditingStyle(syntax_style);
-
 			break;
+			
 		case "None":
 			syntax_style = SyntaxConstants.SYNTAX_STYLE_NONE;
 			pad.setSyntaxEditingStyle(syntax_style);
 			break;
+			
 		case "C":
 			syntax_style = SyntaxConstants.SYNTAX_STYLE_C;
 			pad.setSyntaxEditingStyle(syntax_style);
+			break;
 
+		case "CSS":
+			syntax_style = SyntaxConstants.SYNTAX_STYLE_CSS;
+			pad.setSyntaxEditingStyle(syntax_style);
+			break;
+
+		case "HTML":
+			syntax_style = SyntaxConstants.SYNTAX_STYLE_HTML;
+			pad.setSyntaxEditingStyle(syntax_style);
+			break;
+
+		case "JavaScript":
+			syntax_style = SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT;
+			pad.setSyntaxEditingStyle(syntax_style);
 			break;
 		}
 
@@ -734,6 +749,10 @@ public class JNotepad implements ActionListener, Printable {
 		JCheckBoxMenuItem menu_wordwrap = new JCheckBoxMenuItem("Word Wrap");
 		JRadioButtonMenuItem syntax_java = new JRadioButtonMenuItem("Java");
 		JRadioButtonMenuItem syntax_none = new JRadioButtonMenuItem("None");
+		JRadioButtonMenuItem syntax_css = new JRadioButtonMenuItem("CSS");
+		JRadioButtonMenuItem syntax_html = new JRadioButtonMenuItem("HTML");
+		JRadioButtonMenuItem syntax_javascript = new JRadioButtonMenuItem("JavaScript");
+		
 		syntax_none.setSelected(true);
 		JRadioButtonMenuItem syntax_c = new JRadioButtonMenuItem("C");
 
@@ -741,6 +760,10 @@ public class JNotepad implements ActionListener, Printable {
 		syntax_group.add(syntax_c);
 		syntax_group.add(syntax_none);
 		syntax_group.add(syntax_java);
+		syntax_group.add(syntax_css);
+		syntax_group.add(syntax_html);
+		syntax_group.add(syntax_javascript);
+		
 
 		menu_showlinenumbers = new JCheckBoxMenuItem("Line Numbers");
 		menu_goto = new JMenuItem("Go To...", KeyEvent.VK_G);
@@ -811,6 +834,10 @@ public class JNotepad implements ActionListener, Printable {
 		syntax_java.addActionListener(this);
 		syntax_none.addActionListener(this);
 		syntax_c.addActionListener(this);
+		syntax_css.addActionListener(this);
+		syntax_html.addActionListener(this);
+		syntax_javascript.addActionListener(this);
+		
 		menu_wordwrap.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
@@ -877,6 +904,9 @@ public class JNotepad implements ActionListener, Printable {
 		menu_syntax.addSeparator();
 		menu_syntax.add(syntax_java);
 		menu_syntax.add(syntax_c);
+		menu_syntax.add(syntax_html);
+		menu_syntax.add(syntax_css);
+		menu_syntax.add(syntax_javascript);
 
 		menuBar.add(menu_file);
 		menuBar.add(menu_edit);
